@@ -13,6 +13,7 @@ import { Configuration, OpenAIApi } from "openai";
 
 import { OPENAI_KEY, ORG_ID } from "@env";
 import Icon from "react-native-vector-icons/AntDesign";
+import tw from "tailwind-react-native-classnames";
 
 const configuration = new Configuration({
   organization: ORG_ID,
@@ -63,22 +64,23 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={tw`bg-gray-700 items-center justify-center p-6 pt-12 h-full`}>
       <FlatList
-        style={styles.corpo}
+        style={tw`w-11/12`}
         data={cronologia}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => {
           return (
             <View
               style={[
-                styles.messaggio,
+                tw`m-1 rounded-lg px-2 py-1 text-white bg-gray-600`,
+                {maxWidth: '80%'},
                 item.sorgente === "User"
-                  ? styles.messaggioUser
-                  : styles.messaggioChat,
+                  ? tw`self-end`
+                  : tw`self-start`,
               ]}
             >
-              <Text style={styles.text}>{item.messaggio}</Text>
+              <Text style={tw`text-white`}>{item.messaggio}</Text>
             </View>
           );
         }}
@@ -88,69 +90,21 @@ const HomeScreen = () => {
         <TextInput
           value={domanda}
           onChangeText={setDomanda}
-          style={styles.inputText}
+          style={[tw`border border-white rounded-lg p-2 pt-1 text-white`, {
+            minWidth: '80%',
+            maxWidth: '80%',
+            maxHeight: 200,
+            textAlignVertical: "top"
+          }]}
           multiline={true}
           numberOfLines={4}
         />
-        <Pressable style={styles.button} onPress={() => callChat(domanda)}>
+        <Pressable style={tw`w-10 h-10 bg-green-400 rounded-full items-center justify-center ml-1`} onPress={() => callChat(domanda)}>
           <Icon name="arrowright" color="white" />
         </Pressable>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 3,
-    backgroundColor: "#1e293b",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-    paddingTop: 48,
-  },
-  inputText: {
-    minWidth: "80%",
-    maxWidth: "80%",
-    maxHeight: 200,
-    borderWidth: 1,
-    borderColor: "white",
-    borderRadius: 12,
-    padding: 6,
-    textAlignVertical: "top",
-    color: "white",
-  },
-  button: {
-    height: 40,
-    width: 40,
-    backgroundColor: "#4ade80",
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 4,
-  },
-  messaggio: {
-    margin: 4,
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    maxWidth: "80%",
-    color: "white",
-    backgroundColor: "#475569",
-  },
-  messaggioUser: {
-    alignSelf: "flex-end",
-  },
-  messaggioChat: {
-    alignSelf: "flex-start",
-  },
-  text: {
-    color: "white",
-  },
-  corpo: {
-    flex: 3,
-    width: "90%",
-  },
-});
 
 export default HomeScreen;
